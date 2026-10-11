@@ -1,0 +1,209 @@
+{
+  "main": {
+    "id": "e0b437257eece221",
+    "type": "split",
+    "children": [
+      {
+        "id": "4edb0cf8e1cbeae5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bfc5449523904b9a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Guia de Manutencao e Debug.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Guia de Manutencao e Debug"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "130eb9d954d00bc0",
+    "type": "split",
+    "children": [
+      {
+        "id": "b0bf51b1439d81d8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d4b64755a359f596",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "0bf8985da235f478",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "fcedfb7ff68c95b1",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "a3d9d12730a5420a",
+    "type": "split",
+    "children": [
+      {
+        "id": "8dacff9ac408dd60",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6994ef9b2651bca2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Guia de Manutencao e Debug.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos"
+            }
+          },
+          {
+            "id": "31b7e9e692561fa1",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Guia de Manutencao e Debug.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída"
+            }
+          },
+          {
+            "id": "b6d79d305f1bc4d0",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "77b873bdfb309e58",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "47c8c015bb067f60",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Guia de Manutencao e Debug.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false
+    }
+  },
+  "active": "bfc5449523904b9a",
+  "lastOpenFiles": [
+    "Index.md",
+    "Guia de Deploy em VPS Linux.md",
+    "Configuracoes e Ambiente.md",
+    "Bot Telegram e Postagens.md",
+    "Banco de Dados e Deduplicacao.md",
+    "Arquitetura do Sistema.md",
+    "RFCs/RFC-04 - Resiliencia e Fallback JSON-LD.md",
+    "RFCs/RFC-03 - Novas Plataformas (Magalu e AliExpress).md",
+    "RFCs/RFC-02 - Multiplos Canais e Redes Sociais.md",
+    "RFCs/RFC-01 - Templates Customizaveis e Cupons.md",
+    "Fontes/Shopee.md",
+    "Fontes/Mercado Livre.md",
+    "Fontes/Amazon.md",
+    "Roadmap e Evolucao.md",
+    "Painel Web Local.md"
+  ]
+}

@@ -1,0 +1,17 @@
+services:
+  bot-ofertas:
+    build: .
+    container_name: bot-ofertas-telegram
+    restart: unless-stopped
+    volumes:
+      # Mantém os dados persistidos no host (SQLite, cookies do ML, nichos)
+      - ./data:/app/data
+      - ./.env:/app/.env:ro
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - TZ=America/Sao_Paulo
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

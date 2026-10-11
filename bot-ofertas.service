@@ -1,0 +1,18 @@
+[Unit]
+Description=Bot de Ofertas para Telegram (24/7)
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/bot-ofertas-telegram
+ExecStart=/root/.local/bin/uv run python -m ofertas run
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+Environment=PYTHONUNBUFFERED=1
+Environment=TZ=America/Sao_Paulo
+
+[Install]
+WantedBy=multi-user.target
