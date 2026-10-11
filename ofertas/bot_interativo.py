@@ -25,12 +25,85 @@ async def _cmd_start(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🤖 <b>Bot de Ofertas Multi-Plataforma</b>\n\n"
         "• Cole aqui um link do <b>Mercado Livre, Shopee, Amazon, AliExpress ou Magalu</b> e eu preparo o post com seu link de afiliado e cupom.\n"
+        "• <b>Radar de Desejos:</b> Cadastre alertas para ser avisado no privado quando um produto baixar de preço:\n"
+        "  └ <code>/desejo air fryer 250</code> ou <code>/desejo fone bluetooth</code>\n"
+        "  └ <code>/meusdesejos</code> — veja seus alertas ativos\n"
+        "  └ <code>/removerdesejo &lt;id&gt;</code> — remove um alerta\n\n"
+        "• <b>Comandos de Administrador:</b>\n"
         "• /id — mostra o ID deste chat ou canal\n"
         "• /ciclo — roda um ciclo de busca agora\n"
         "• /esgotado &lt;link_ou_id&gt; — marca uma oferta postada como esgotada no canal\n"
         "• /status — situação do bot",
         parse_mode="HTML",
     )
+
+
+async def _cmd_desejo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    """Permite qualquer inscrito cadastrar um desejo de compra (ex: /desejo air fryer 250)."""
+    args = ctx.args or []
+    if not args:
+        await update.message.reply_text(
+            "🔔 <b>Como usar o Radar de Ofertas:</b>\n\n"
+            "Envie: <code>/desejo &lt;produto&gt; [preço máximo]</code>\n\n"
+            "Exemplos:\n"
+            "• <code>/desejo air fryer 250</code> (alerta quando custar até R$ 250)\n"
+            "• <code>/desejo fone bluetooth</code> (alerta para qualquer preço)",
+            parse_mode="HTML"
+        )
+        return
+
+    preco_max = None
+    try:
+        ultimo = args[-1].replace(",", ".")
+        preco_max = float(ultimo)
+        termos = args[:-1]
+    except ValueError:
+        termos = args
+
+    termo_busca = " ".join(termos).strip()
+    if not termo_busca:
+        await update.message.reply_text("Informe o nome do produto que deseja monitorar.")
+        return
+
+    did = db.adicionar_desejo(update.effective_user.id, termo_busca, preco_max)
+    texto_preco = f" por até <b>R$ {preco_max:.2f}</b>" if preco_max else " em qualquer preço"
+    await update.message.reply_text(
+        f"🎯 <b>Alerta #{did} cadastrado!</b>\n"
+        f"Assim que o robô encontrar <b>{termo_busca}</b>{texto_preco}, você será avisado no privado aqui no Telegram! 🔔",
+        parse_mode="HTML"
+    )
+
+
+async def _cmd_meusdesejos(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    lista = db.listar_desejos_usuario(update.effective_user.id)
+    if not lista:
+        await update.message.reply_text(
+            "Você não tem alertas de desejos ativos no momento.\n"
+            "Cadastre um com: <code>/desejo &lt;produto&gt; [preço]</code>",
+            parse_mode="HTML"
+        )
+        return
+
+    linhas = ["📋 <b>Seus Alertas de Ofertas Ativos:</b>\n"]
+    for d in lista:
+        preco_str = f"até R$ {d['preco_max']:.2f}" if d.get('preco_max') else "qualquer valor"
+        linhas.append(f"• <b>#{d['id']}</b> — {d['termo']} ({preco_str})")
+    linhas.append("\nPara remover um alerta, use: <code>/removerdesejo &lt;id&gt;</code>")
+    await update.message.reply_text("\n".join(linhas), parse_mode="HTML")
+
+
+async def _cmd_removerdesejo(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
+    args = ctx.args or []
+    if not args or not args[0].isdigit():
+        await update.message.reply_text("Informe o ID do alerta para remover. Ex: <code>/removerdesejo 1</code>", parse_mode="HTML")
+        return
+    did = int(args[0])
+    sucesso = db.remover_desejo(did, update.effective_user.id)
+    if sucesso:
+        await update.message.reply_text(f"✅ Alerta #{did} removido com sucesso!")
+    else:
+        await update.message.reply_text("❌ Alerta não encontrado ou não pertence a você.")
+
 
 
 async def _cmd_id(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
@@ -178,6 +251,42 @@ async def _receber_forward(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 
 async def _callback(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
     q = update.callback_query
+
+    # Tratamento de Reações Interativas nos Posts (🔥 / 👎)
+    if q.data.startswith("voto:"):
+        partes = q.data.split(":")
+        if len(partes) >= 4:
+            tipo, plat, id_curto = partes[1], partes[2], partes[3]
+            uid = f"{plat}:{id_curto}"
+            fogo, caro = db.votar_reacao(uid, tipo, q.from_user.id)
+
+            # Reconstrói teclado com as novas contagens mantendo o link de compra existente
+            link_compra = None
+            if q.message.reply_markup and q.message.reply_markup.inline_keyboard:
+                primeira_linha = q.message.reply_markup.inline_keyboard[0]
+                if primeira_linha:
+                    link_compra = primeira_linha[0].url
+
+            btn_fogo = f"🔥 Valeu ({fogo})" if fogo > 0 else "🔥 Valeu"
+            btn_caro = f"👎 Caro ({caro})" if caro > 0 else "👎 Caro"
+
+            novos_botoes = []
+            if link_compra:
+                novos_botoes.append([InlineKeyboardButton("🛒 Pegar oferta", url=link_compra)])
+            novos_botoes.append([
+                InlineKeyboardButton(btn_fogo, callback_data=f"voto:fogo:{plat}:{id_curto}"),
+                InlineKeyboardButton(btn_caro, callback_data=f"voto:caro:{plat}:{id_curto}"),
+            ])
+
+            try:
+                await q.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup(novos_botoes))
+            except Exception:
+                pass  # sem alteração se o clique foi idêntico
+
+            msg_toast = "Voto registrado! 🔥" if tipo == "fogo" else "Feedback registrado! 👎"
+            await q.answer(msg_toast)
+            return
+
     await q.answer()
     acao, _, token = q.data.partition(":")
     oferta = _pendentes.pop(token, None)
@@ -227,11 +336,15 @@ def rodar():
     app.add_handler(CommandHandler("ciclo", _cmd_ciclo))
     app.add_handler(CommandHandler("esgotado", _cmd_esgotado))
     app.add_handler(CommandHandler("encerrar", _cmd_esgotado))
+    app.add_handler(CommandHandler("desejo", _cmd_desejo))
+    app.add_handler(CommandHandler("meusdesejos", _cmd_meusdesejos))
+    app.add_handler(CommandHandler("removerdesejo", _cmd_removerdesejo))
     app.add_handler(CallbackQueryHandler(_callback))
     app.add_handler(MessageHandler(filters.FORWARDED & filters.ChatType.PRIVATE, _receber_forward))
     app.add_handler(MessageHandler(
         (filters.TEXT | filters.CAPTION) & filters.ChatType.PRIVATE & ~filters.COMMAND,
         _receber_link))
+
 
     tem_fonte = any(f.get("ativa") for f in
                     (config.fonte_ml, config.fonte_shopee, config.fonte_amazon,

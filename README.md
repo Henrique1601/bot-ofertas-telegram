@@ -1,21 +1,29 @@
-# Bot de Ofertas para Telegram 🔥
+# Bot de Ofertas Multi-Plataforma para Telegram & WhatsApp 🔥
 
-Bot que roda **no seu PC** (Windows), garimpa promoções em **Mercado Livre, Shopee e Amazon** e posta no seu canal do Telegram com **os seus links de afiliado** — foto, preço "de/por", desconto e botão de compra. Tudo local, sem servidor nem mensalidade.
+Bot de alta performance que garimpa promoções em **Mercado Livre, Shopee, Amazon, AliExpress e Magazine Luiza** e posta nos seus canais e grupos com **os seus links de afiliado** — foto, preço "de/por", desconto, cupons com 1 clique, selo de menor preço histórico e botões de reação interativos.
 
-> ⚠️ Você precisa das **suas próprias** contas de afiliado (Mercado Livre, Amazon Associados, Shopee Afiliados). As comissões vão para quem configurar — cada pessoa usa as suas.
+> ⚠️ Você precisa das **suas próprias** contas de afiliado (Mercado Livre, Amazon Associados, Shopee Afiliados, AliExpress Portals, Magazine Você). As comissões vão diretamente para quem configurar.
 
-## Como funciona
+## 🚀 Principais Recursos
 
-Dois modos, no mesmo programa:
-
-1. **Automático** — de tempos em tempos busca ofertas, filtra por desconto mínimo, evita repetir produto e posta as melhores no canal, já com o seu link de afiliado.
-2. **Conversor** — você cola qualquer link de produto no privado do bot; ele monta a prévia do post com o seu link e você decide **✅ Postar** ou **🗑 Descartar**.
+1. **5 Plataformas de Afiliados:** Mercado Livre (`meli.la`), Shopee Open API, Amazon (Creators API + tag), AliExpress Portals e Magazine Luiza (Magazine Você).
+2. **📉 Selo de Menor Preço Histórico:** Detecta automaticamente quando um produto atingiu o menor valor registrado nos últimos 30 dias.
+3. **✨ Enriquecimento por IA (Google Gemini):** Limpa títulos poluídos de marketplaces e gera 3 destaques técnicos reais do produto.
+4. **🎟️ Cupons com 1 Toque:** Formatação nativa para copiar cupons com 1 toque no celular (`<code>CUPOM</code>`).
+5. **🔔 Radar de Desejos (Wishlist de Membros):** Inscritos usam `/desejo <produto> [preco]` e são alertados no privado quando a oferta aparece.
+6. **👍 Reações Interativas nos Posts:** Botões `[🔥 Valeu (0)]` e `[👎 Caro (0)]` com contagem dinâmica em tempo real.
+7. **📲 Cross-Posting no WhatsApp:** Postagem automática e simultânea em canais e grupos do WhatsApp.
+8. **🛡️ Resiliência Extrema com Schema.org:** Extrator JSON-LD e OpenGraph para nunca quebrar mesmo se os sites mudarem o CSS.
+9. **🔄 CI/CD Automatizado:** Pipeline do GitHub Actions pronto para deploy contínuo em VPS ou nuvem (Oracle Cloud Always Free).
 
 | Plataforma | De onde vêm as ofertas | Link de afiliado |
 |---|---|---|
-| Mercado Livre | Página de ofertas, filtrada por categoria | API do Linkbuilder do painel (login 1x); gera `meli.la/...` |
-| Shopee | Open API oficial de afiliados (busca por palavra-chave) | A API já devolve o link com sua comissão |
-| Amazon | Creators API; ou, enquanto sua conta não é elegível, ofertas por departamento | Link com a sua tag |
+| Mercado Livre | Página de ofertas, filtrada por categoria | Linkbuilder interno (`meli.la/...`) |
+| Shopee | Open API oficial de afiliados (GraphQL) | Link rastreado com comissão |
+| Amazon | Creators API ou busca por departamento | Link com tag de associado |
+| AliExpress | Busca e página de produtos | Link de afiliado com tracking ID |
+| Magazine Luiza | Ofertas do dia e produtos diretos | Vitrine personalizada do Magazine Você |
+
 
 ---
 

@@ -37,6 +37,10 @@ def montar_caption(o: Oferta) -> str:
     if o.is_super_desconto:
         linhas.append("🚨 <b>SUPER OFERTA / POSSÍVEL BUG DE PREÇO</b> 🚨\n")
 
+    # Selo de Menor Preço Histórico (últimos 30/60 dias)
+    if o.is_menor_preco:
+        linhas.append("📉 <b>MENOR PREÇO HISTÓRICO REGISTRADO!</b>\n")
+
     linhas.append(f"🔥 <b>{escape(o.titulo[:180])}</b>")
     linhas.append("")
 
@@ -51,6 +55,13 @@ def montar_caption(o: Oferta) -> str:
     # Cupom com cópia em 1 toque
     if o.cupom:
         linhas.append(f"🎟️ Cupom: <code>{escape(o.cupom.strip().upper())}</code> <i>(toque para copiar)</i>")
+
+    # Destaques gerados por IA (se disponíveis)
+    if o.destaques_ia:
+        linhas.append("")
+        linhas.append("✨ <b>Destaques do produto:</b>")
+        for item in o.destaques_ia:
+            linhas.append(f"• {escape(item)}")
 
     if o.extra:
         linhas.append(escape(o.extra))
@@ -69,8 +80,11 @@ def montar_caption(o: Oferta) -> str:
             tags.append(f"#{cat_tag}")
     if o.is_super_desconto:
         tags.append("#SuperDesconto")
+    if o.is_menor_preco:
+        tags.append("#MenorPreco")
 
     linhas.append(" ".join(tags))
 
     return "\n".join(linhas)
+
 

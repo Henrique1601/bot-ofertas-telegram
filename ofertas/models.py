@@ -15,6 +15,9 @@ class Oferta:
     extra: str | None = None   # avaliação, frete grátis, "no Pix" etc.
     cupom: str | None = None   # código do cupom para cópia com 1 clique
     categoria: str | None = None # para hashtags automáticas
+    is_menor_preco: bool = False # selo de menor preço histórico (últimos 30/60 dias)
+    destaques_ia: list[str] | None = None # 2-3 bullets técnicos resumidos pela IA
+
 
     @property
     def uid(self) -> str:

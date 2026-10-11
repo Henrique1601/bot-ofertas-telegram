@@ -4,11 +4,12 @@ import re
 
 from telegram import Bot
 
-from . import db
+from . import ai, db, whatsapp
 from .config import config, dentro_do_horario
 from .models import Oferta
 from .sources import aliexpress, amazon, magalu, mercadolivre, shopee
 from .telegram_poster import postar_oferta
+
 
 log = logging.getLogger("ofertas.pipeline")
 
@@ -153,6 +154,40 @@ async def executar_ciclo(bot: Bot) -> int:
         if not o.url_afiliado:
             log.warning("Sem link de afiliado, pulando: %s", o.titulo[:60])
             continue
+
+        # 1. Menor preço histórico
+        if o.preco:
+            o.is_menor_preco = db.verificar_menor_preco(o.uid, o.preco)
+
+        # 2. Enriquecimento por IA (Google Gemini) se chave configurada
+        if config.gemini_api_key:
+            try:
+                novo_tit, destaques = await asyncio.to_thread(ai.enriquecer_oferta, o.titulo, o.extra)
+                if novo_tit:
+                    o.titulo = novo_tit
+                o.destaques_ia = destaques
+            except Exception as e_ai:
+                log.warning("Falha ao enriquecer oferta com IA: %s", e_ai)
+
+        # 3. Radar de Desejos (Notificar inscritos interessados)
+        try:
+            desejos = db.buscar_desejos_compativeis(o)
+            for d in desejos:
+                try:
+                    texto_desejo = (
+                        f"🔔 <b>RADAR DE OFERTAS: SEU DESEJO APARECEU!</b>\n\n"
+                        f"Você cadastrou um alerta para: <b>{d['termo']}</b>\n\n"
+                        f"🔥 <b>{o.titulo}</b>\n"
+                        f"✅ Preço: <b>R$ {o.preco:.2f}</b>\n\n"
+                        f"🛒 <a href=\"{o.url_afiliado}\">Clique aqui para ver a oferta</a>"
+                    )
+                    await bot.send_message(d["user_id"], texto_desejo, parse_mode="HTML")
+                except Exception as e_d:
+                    log.warning("Falha ao notificar desejo para user %s: %s", d.get("user_id"), e_d)
+        except Exception as e_w:
+            log.warning("Erro ao verificar radar de desejos: %s", e_w)
+
+        # 4. Postagem no Telegram (Canal Principal e Canais Extras)
         msg_principal = None
         for chat in canais_destino:
             try:
@@ -166,13 +201,19 @@ async def executar_ciclo(bot: Bot) -> int:
             db.registrar(o, chat_id=config.chat_id, message_id=msg_principal.message_id)
             postadas += 1
         elif canais_destino:
-            # Se postou em outro canal ou deu fallback
             db.registrar(o, chat_id=config.chat_id)
             postadas += 1
+
+        # 5. Cross-Posting no WhatsApp (Canais/Grupos)
+        try:
+            await asyncio.to_thread(whatsapp.postar_whatsapp, o)
+        except Exception as e_wa:
+            log.warning("Erro ao postar no WhatsApp: %s", e_wa)
 
         if o is not validas[-1]:
             await asyncio.sleep(config.espacamento_segundos)
 
     log.info("Ciclo: %d coletadas, %d aprovadas, %d postadas", len(brutas), len(boas), postadas)
     return postadas
+
 

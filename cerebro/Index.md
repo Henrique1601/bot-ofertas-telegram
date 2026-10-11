@@ -52,10 +52,13 @@ Use estas RFCs para guiar o desenvolvimento das próximas versões sem compromet
 
 | RFC | Título | Status | Prioridade |
 | :--- | :--- | :--- | :--- |
-| [[RFC-01 - Templates Customizaveis e Cupons\|RFC-01]] | Templates Customizáveis e Destaque de Cupons | 🟡 Proposto | Alta |
-| [[RFC-02 - Multiplos Canais e Redes Sociais\|RFC-02]] | Múltiplos Canais Telegram, Grupos e Webhooks | 🟡 Proposto | Média |
-| [[RFC-03 - Novas Plataformas (Magalu e AliExpress)\|RFC-03]] | Integração Magalu e AliExpress | 🟡 Proposto | Alta |
-| [[RFC-04 - Resiliencia e Fallback JSON-LD\|RFC-04]] | Resiliência dos Scrapers e Fallback JSON-LD | 🟡 Proposto | Alta |
+| [[RFC-01 - Templates Customizaveis e Cupons\|RFC-01]] | Templates Customizáveis e Destaque de Cupons | 🟢 Concluído | Alta |
+| [[RFC-02 - Multiplos Canais e Redes Sociais\|RFC-02]] | Múltiplos Canais Telegram, Grupos e Webhooks | 🟢 Concluído | Média |
+| [[RFC-03 - Novas Plataformas (Magalu e AliExpress)\|RFC-03]] | Integração Magalu e AliExpress | 🟢 Concluído | Alta |
+| [[RFC-04 - Resiliencia e Fallback JSON-LD\|RFC-04]] | Resiliência dos Scrapers e Fallback JSON-LD | 🟢 Concluído | Alta |
+| [[RFC-05 - Radar de Desejos e Menor Preco Historico\|RFC-05]] | Radar de Desejos e Menor Preço Histórico | 🟢 Concluído | Alta |
+| [[RFC-06 - Enriquecimento com IA e WhatsApp\|RFC-06]] | Enriquecimento com IA e WhatsApp | 🟢 Concluído | Alta |
+
 
 ---
 

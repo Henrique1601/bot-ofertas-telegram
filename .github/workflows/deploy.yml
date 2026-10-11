@@ -1,0 +1,54 @@
+name: CI/CD & Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Verificação e Sintaxe
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar UV
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Verificar integridade do projeto
+        run: |
+          uv sync
+          uv run python -c "import ofertas; print('Módulo ofertas importado com sucesso!')"
+
+  deploy:
+    name: Deploy Automático na Nuvem
+    needs: check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH na Oracle Cloud
+        if: env.HAS_ORACLE_HOST != ''
+        env:
+          HAS_ORACLE_HOST: ${{ secrets.ORACLE_HOST }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.ORACLE_HOST }}
+          username: ${{ secrets.ORACLE_USER || 'ubuntu' }}
+          key: ${{ secrets.ORACLE_SSH_KEY }}
+          script: |
+            set -e
+            cd /home/ubuntu/bot-ofertas-telegram || git clone https://github.com/${{ github.repository }}.git /home/ubuntu/bot-ofertas-telegram
+            cd /home/ubuntu/bot-ofertas-telegram
+            git pull origin main
+            ~/.local/bin/uv sync
+            sudo systemctl restart bot-ofertas || true
+            echo "Deploy concluído com sucesso!"

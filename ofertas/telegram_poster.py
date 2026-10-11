@@ -9,8 +9,18 @@ from .models import Oferta
 log = logging.getLogger("ofertas.poster")
 
 
-def teclado_oferta(o: Oferta) -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup([[InlineKeyboardButton("🛒 Pegar oferta", url=o.url_afiliado)]])
+def teclado_oferta(o: Oferta, fogo: int = 0, caro: int = 0) -> InlineKeyboardMarkup:
+    uid_curto = o.id_produto[:20]
+    btn_fogo = f"🔥 Valeu ({fogo})" if fogo > 0 else "🔥 Valeu"
+    btn_caro = f"👎 Caro ({caro})" if caro > 0 else "👎 Caro"
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("🛒 Pegar oferta", url=o.url_afiliado)],
+        [
+            InlineKeyboardButton(btn_fogo, callback_data=f"voto:fogo:{o.plataforma}:{uid_curto}"),
+            InlineKeyboardButton(btn_caro, callback_data=f"voto:caro:{o.plataforma}:{uid_curto}"),
+        ],
+    ])
+
 
 
 async def postar_oferta(bot: Bot, oferta: Oferta, chat_id: str | int,

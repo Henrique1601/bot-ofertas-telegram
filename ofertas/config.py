@@ -44,10 +44,20 @@ class Config:
         self.aliexpress_tracking_id: str = os.getenv("ALIEXPRESS_TRACKING_ID", "").strip()
         self.magalu_loja: str = os.getenv("MAGALU_LOJA", "").strip()
 
+        # IA (Google Gemini)
+        self.gemini_api_key: str = os.getenv("GEMINI_API_KEY", "").strip()
+
+        # WhatsApp (Evolution API / Z-API)
+        self.whatsapp_api_url: str = os.getenv("WHATSAPP_API_URL", "").strip()
+        self.whatsapp_api_key: str = os.getenv("WHATSAPP_API_KEY", "").strip()
+        self.whatsapp_instance: str = os.getenv("WHATSAPP_INSTANCE", "ofertas").strip()
+        self.whatsapp_chats: str = os.getenv("WHATSAPP_CHATS", "").strip()
+
         # Multi-canais (ex: TELEGRAM_CANAIS_EXTRAS="@canal1,@canal2" ou config.yaml canais: [...])
         canais_env = [c.strip() for c in os.getenv("TELEGRAM_CANAIS_EXTRAS", "").split(",") if c.strip()]
         canais_yaml = [str(c).strip() for c in (geral.get("canais") or []) if str(c).strip()]
         self.canais_extras: list[str] = list(dict.fromkeys(canais_env + canais_yaml))
+
 
         # config.yaml
         self.intervalo_minutos: int = int(geral.get("intervalo_minutos", 45))

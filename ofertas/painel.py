@@ -51,8 +51,19 @@ CAMPOS = [
      "Opcional. Código do link de afiliado do AliExpress Portals."),
     ("MAGALU_LOJA", "Nome da Loja Magazine Você", "Magazine Luiza", False,
      "Opcional. O nome da sua vitrine no Magazine Você (ex: sualoja)."),
+    ("GEMINI_API_KEY", "Chave API Gemini (IA)", "Inteligência Artificial", True,
+     "Opcional. Google AI Studio. Limpa títulos e gera destaques técnicos."),
+    ("WHATSAPP_API_URL", "URL da API do WhatsApp", "WhatsApp", False,
+     "Opcional. URL base da Evolution API ou Z-API (ex: http://localhost:8080)."),
+    ("WHATSAPP_API_KEY", "API Key do WhatsApp", "WhatsApp", True,
+     "Opcional. Chave de autenticação da API do WhatsApp."),
+    ("WHATSAPP_INSTANCE", "Instância do WhatsApp", "WhatsApp", False,
+     "Opcional. Nome da instância na API (padrão: ofertas)."),
+    ("WHATSAPP_CHATS", "Canais/Grupos do WhatsApp", "WhatsApp", False,
+     "Opcional. IDs de grupos ou números separados por vírgula (ex: 1203630...@g.us)."),
 ]
 CHAVES = [c[0] for c in CAMPOS]
+
 
 
 
